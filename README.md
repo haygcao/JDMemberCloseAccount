@@ -35,7 +35,7 @@
 
 ## 思路
 
-![项目思路](https://github.com/yqchilde/JDMemberCloseAccount/blob/main/screenshots/project_1.png)
+![项目思路](https://github.com/yqchilde/JDMemberCloseAccount/blob/main/doc/project_1.png)
 
 1. 利用selenium打开退会页面
 
@@ -74,54 +74,71 @@
            > 首先感谢tg群的朋友[@millerchen](https://github.com/bluewatercg)
            提供的思路，具体实现方案是电脑屏幕留出一个区域用来显示手机投屏的地方（如果你电脑是Mac，无需投屏，只需要打开IMessage，并保持短信同步即可，然后OCR识别IMessage），然后打开短信列表，然后找个截图工具记一下当前需要识别的的`左上角`和`右下角`坐标(最好截取那一整条短信的坐标，当然截取范围越小，识别越快)，然后通过ocr工具识别数字验证码
 
-           > **注意：** OCR只是处理识别短信验证码并填入，不要误解为图形验证码也可以解决。如果定位不准，看一下项目目录生成的`ios_code_pic.png`
+           > **注意：** OCR只是处理识别短信验证码并填入，不要误解为图形验证码也可以解决。如果定位不准，看一下项目目录生成的`captcha_screenshot.png`
            图片位置在当前屏幕的哪个位置，[测试识别效果gif点我查看](https://github.com/yqchilde/JDMemberCloseAccount#screenshots) , 此外，坐标和电脑分辨率有关，如果分辨是是1080P，那么qq截图识别的坐标就是刚好一比一的，比我的是4k显示器，是以百分之200显示的，那所有坐标就要乘以2了
 
            百度ocr (
            之前用过的用户还是免费500次/天的额度，新用户调整为1000次/月的额度，调整详情参考[这里](https://ai.baidu.com/support/news?action=detail&id=2390))
 
-                * 需要在`config.yaml`中配置如下参数：
+                * 需要在config.yaml中配置如下参数：
 
-                * `sms_captcha.is_ocr`设置为`true`
+                * sms_captcha.is_ocr设置为 true
 
-                * `sms_captcha.is_ocr.type`设置为`baidu`
+                * sms_captcha.is_ocr.type设置为 baidu
 
-                * `sms_captcha.is_ocr.baidu_app_id`补充完整
+                * sms_captcha.is_ocr.baidu_app_id补充完整
 
-                * `sms_captcha.is_ocr.baidu_api_key`补充完整
+                * sms_captcha.is_ocr.baidu_api_key补充完整
 
-                * `sms_captcha.is_ocr.baidu_secret_key`补充完整
+                * sms_captcha.is_ocr.baidu_secret_key补充完整
 
            阿里云ocr (
            用户新购0元500次，后续500次/0.01元，开通地址[阿里云市场](https://market.aliyun.com/products/57124001/cmapi028554.html?spm=5176.2020520132.101.2.608172181RzlnC#sku=yuncode2255400000))
 
-                * 同上，需要在`config.yaml`中配置如下参数：
+                * 同上，需要在config.yaml中配置如下参数：
 
-                * `sms_captcha.is_ocr`设置为`true`
+                * sms_captcha.is_ocr设置为 true
 
-                * `sms_captcha.is_ocr.type`设置为`aliyun`
+                * sms_captcha.is_ocr.type设置为 aliyun
 
-                * `sms_captcha.is_ocr.aliyun_appcode`补充完整
+                * sms_captcha.is_ocr.aliyun_appcode补充完整
 
            easyocr (免费，本地识别)
 
-                * 同上，需要在`config.yaml`中配置如下参数：
+                * 同上，需要在config.yaml中配置如下参数：
 
-                * `sms_captcha.is_ocr`设置为`true`
+                * sms_captcha.is_ocr设置为 true
 
-                * `sms_captcha.is_ocr.type`设置为`easyocr`
+                * sms_captcha.is_ocr.type设置为 easyocr
 
                 * 使用时注意框选识别的范围只显示6位数字验证码(现支持一整条完整短信的区域，当然范围越大识别速度也会相应增加，区域扩大是为了优化某些用户短信验证码6位数字每次位置不一致问题)（毕竟免费开源，识别条件有点苛刻）
 
-3. 第二关：图形验证码（任选以下一种类型，默认采用本地识别）
+           百度翻译 (免费额度 10000次/每月，开通地址 [百度翻译开放平台](https://fanyi-api.baidu.com/register))
 
-    1. 本地识别（再也不用花钱了👍）
+           **开通教程：**
+            1. 打开 [百度翻译开放平台](https://fanyi-api.baidu.com/register) 注册个人开发者并实名认证
 
-        * 来自[@AntonVanke](https://github.com/AntonVanke)
-          大佬提供的 [JDCaptcha](https://github.com/AntonVanke/JDCaptcha) 项目(已集成)
-          ，[测试图在最后一张](https://github.com/yqchilde/JDMemberCloseAccount#screenshots)
+            2. 打开 [开发者信息](https://fanyi-api.baidu.com/api/trans/product/desktop?req=developer) 查看appid 和 秘钥
 
-        * [@dd178](https://github.com/dd178) 使用 [yolov4](https://github.com/AlexeyAB/darknet) 训练的权重
+            3. 打开 [服务选择](https://fanyi-api.baidu.com/choose) 选择图片翻译服务开通
+
+           **配置信息：**
+
+                * 同上，需要在config.yaml中配置如下参数：
+
+                * sms_captcha.is_ocr设置为 true
+
+                * sms_captcha.is_ocr.type设置为 baidu_fanyi
+
+                * sms_captcha.is_ocr.baidu_fanyi_appid补充完整
+
+                * sms_captcha.is_ocr.baidu_fanyi_appkey补充完整
+
+3. 第二关：图形验证码（任选以下一种类型，更新文档时，验证方式为滑块验证码或点选式验证码，**滑块已内置，仅需个人解决点选式**）
+
+    1. 本地识别
+
+        * 2022-06-06更新文档：之前的本地识别皆已失效，需重新训练
 
     2. 收费的打码平台
 
@@ -156,7 +173,7 @@
 3. 下载对应的浏览器驱动
 
    `chrome`请打开`设置-关于chrome`查看浏览器的版本，然后去 [chromedriver](http://chromedriver.storage.googleapis.com/index.html)
-   下载对应的版本/系统驱动，[如图所示](https://raw.githubusercontent.com/yqchilde/JDMemberCloseAccount/main/screenshots/test_img5.png)
+   下载对应的版本/系统驱动，[如图所示](https://raw.githubusercontent.com/yqchilde/JDMemberCloseAccount/main/doc/test_img5.png)
    ，将解压出来的`chromedriver`文件放入项目的`drivers`目录下即可）
 
 ### 二、获取 jd_wstool 监听地址及选择 jd_wstool 工具（IOS未越狱跳过此步骤）
@@ -220,11 +237,11 @@
 2. 获取验证码区域的坐标
 
     * **windows**：按prtsc键（F12旁边）截图或其他软件截**全屏**，打开Windows附件*
-      画图，粘贴进去，切换铅笔工具，就可以在左下角查看坐标，坐标格式请查看[图片](https://raw.githubusercontent.com/yqchilde/JDMemberCloseAccount/main/screenshots/test_img3.png)
+      画图，粘贴进去，切换铅笔工具，就可以在左下角查看坐标，坐标格式请查看[图片](https://raw.githubusercontent.com/yqchilde/JDMemberCloseAccount/main/doc/test_img3.png)
       ，将坐标填入`ocr_range`，例`ocr_range: [100, 200, 300, 400]`，填完坐标后不要移动投屏软件的窗口
 
     * **mac**：参考windows，请注意，windows坐标原点\(0, 0)位于左上角，而mac坐标原点\(0, 0)位于左下角
-    
+
     * **Tips**：推荐使用[snipaste](https://zh.snipaste.com)截图软件查看屏幕坐标，屏幕左上角为原点
 
 
@@ -244,13 +261,13 @@
 
 #### 3. 选择图形验证码识别方式（可跳过）
 
-* **深度学习识别（默认）：** `config.yaml`第66行改为`type: "yolov4"`
+* [x] 手动：`config.yaml`第96行改为`type: "manual"`
 
-* **本地识别：** `config.yaml`第66行改为`type: "local"`
+* [ ] 本地识别：~~`config.yaml`第96行改为`type: "local"`~~
 
-* **超级鹰（付费）：** `config.yaml`第66行改为`type: "cjy"`，并填写第67-69行
+* [x] 超级鹰（付费）：`config.yaml`第96行改为`type: "cjy"`，并填写第97-99行
 
-* **图鉴（付费）：** `config.yaml`第66行改为`type: "tj"`，并填写第71-72行
+* [x] 图鉴（付费）：`config.yaml`第96行改为`type: "tj"`，并填写第101-102行
 
 #### 👇👇👇本项目配置文件详细说明👇👇👇
 
@@ -265,7 +282,7 @@ debug: false
 # selenium 相关
 # selenium.browserType: 浏览器类型
 # selenium.headless: 无头模式，建议默认设置
-# selenium.binary: 可执行路径，如果驱动没有找到浏览器的话需要你手动配置
+# selenium.binary: 可执行路径，如果驱动没有找到浏览器的话需要你手动配置，路径 “\” 符号注意转义需要写成 "\\"
 # selenium.timeout: selenium操作超时时间，超过会跳过当前店铺，进行下一个店铺，默认为30秒
 # selenium.check_wait: selenium操作发送验证码和校验是否成功注销的等待时间，目的是跳过黑店，默认3秒
 selenium:
@@ -280,25 +297,25 @@ selenium:
 # shop.specify_shops: 指定注销的店铺，指定店铺优先级大于需要跳过的店铺，多个店铺用英文逗号隔开，格式为["aag会员中心", "大自然品牌会员"]
 # shop.phone_tail_number: 手机后4位尾号，若填写将会校验店铺尾号是否是规定的，不符合就跳过，支持多手机号，格式为["0123","1234"]
 # shop.member_close_max_number: 设置本次运行注销的最大店铺数，默认为0，代表不限制
-# shop.wait_refresh_time: 乱码店铺挂载时间，默认为挂31分钟，可自行调整
 shop:
-  skip_shops: []
-  specify_shops: []
-  phone_tail_number: []
+  skip_shops: [ ]
+  specify_shops: [ ]
+  phone_tail_number: [ ]
   member_close_max_number: 0
-  wait_refresh_time: 31
 
 # sms_captcha 短信验证码相关
 # sms_captcha.is_ocr: 是否开启OCR模式，IOS设备必须开启，安卓非必须
 # sms_captcha.jd_wstool: 是否调用jd_wstool工具监听验证码，默认为开启，如果不想开启，设置为false会调用内置websocket监听
 # sms_captcha.ws_conn_url: websocket链接地址，不用动
 # sms_captcha.ws_timeout: websocket接收验证码时间超时时间，超时会跳过当前店铺，进行下一个店铺，默认为60秒
-# sms_captcha.ocr.type: ocr的类型，可选：baidu、aliyun、easyocr
+# sms_captcha.ocr.type: ocr的类型，可选：baidu、aliyun、easyocr、baidu_fanyi
 # sms_captcha.ocr.ocr_range: 需要截取的投屏区域的验证码左上角和右下角坐标，顺序依次是 [左x,左y,右x,右y]，如[1,2,3,4]
 # sms_captcha.ocr.ocr_delay_time: OCR识别的延迟时间，如果没识别到就几秒后再次尝试，默认为5
 # sms_captcha.ocr.baidu_app_id: 需要在[百度智能云](https://cloud.baidu.com/) 注册个账号，搜索文字识别项目，创建应用后的`app_id`
 # sms_captcha.ocr.baidu_api_key: 需要在[百度智能云](https://cloud.baidu.com/) 注册个账号，搜索文字识别项目，创建应用后的`api_key`
 # sms_captcha.ocr.baidu_secret_key: 需要在[百度智能云](https://cloud.baidu.com/) 注册个账号，搜索文字识别项目，创建应用后的`secret_key`
+# sms_captcha.ocr.baidu_fanyi_appid: 百度翻译图片翻译的`app_id`，需要在[百度翻译](https://fanyi-api.baidu.com/register) 注册账号，开通图片翻译
+# sms_captcha.ocr.baidu_fanyi_appkey: 百度翻译图片翻译的`秘钥`，需要在[百度翻译](https://fanyi-api.baidu.com/register) 注册账号，开通图片翻译
 # sms_captcha.ocr.aliyun_appcode: 需要在[阿里云市场](https://market.aliyun.com/products/57124001/cmapi028554.html?spm=5176.2020520132.101.2.608172181RzlnC#sku=yuncode2255400000) 购买后的`AppCode`
 sms_captcha:
   is_ocr: false
@@ -312,10 +329,12 @@ sms_captcha:
     baidu_app_id: ""
     baidu_api_key: ""
     baidu_secret_key: ""
+    baidu_fanyi_appid: ""
+    baidu_fanyi_appkey: ""
     aliyun_appcode: ""
 
 # image_captcha 图形验证码相关
-# image_captcha.type: 图形验证码类型，可选：local、cjy、tj、yolov4
+# image_captcha.type: 图形验证码类型，可选：local、cjy、tj、manual（manual为手动验证）
 # image_captcha.cjy_username: 超级鹰账号，仅在 image_captcha.type 为 cjy 时需要设置
 # image_captcha.cjy_password: 超级鹰密码，仅在 image_captcha.type 为 cjy 时需要设置
 # image_captcha.cjy_soft_id: 超级鹰软件ID，仅在 image_captcha.type 为 cjy 时需要设置
@@ -323,11 +342,8 @@ sms_captcha:
 # image_captcha.tj_username: 图鉴账号，仅在 image_captcha.type 为 tj 时需要设置
 # image_captcha.tj_password: 图鉴密码，仅在 image_captcha.type 为 tj 时需要设置
 # image_captcha.tj_type_id: 图鉴验证码类型，仅在 image_captcha.type 为 tj 时需要设置，且该项目指定为 19
-# yolov4_weights: yolov4权重文件路径，仅在 image_captcha.type 为 yolov4 时需要设置
-# yolov4_cfg: yolov4配置文件路径，仅在 image_captcha.type 为 yolov4 时需要设置
-# yolov4_net_size: yolov4网络size，仅在 image_captcha.type 为 yolov4 时需要设置
 image_captcha:
-  type: "yolov4"
+  type: "tj"
   cjy_username: ""
   cjy_password: ""
   cjy_soft_id: ""
@@ -335,9 +351,6 @@ image_captcha:
   tj_username: ""
   tj_password: ""
   tj_type_id: 19
-  yolov4_weights: "yolov4/yolov4-tiny-custom.weights"
-  yolov4_cfg: "yolov4/yolov4-tiny-custom.cfg"
-  yolov4_net_size: 512
 
 # user-agent 用户代理，可自行配置
 user-agent:
@@ -405,7 +418,8 @@ user-agent:
 
     * [WARNING] WebSocket监听时发生了问题 (22, '远程计算机拒绝网络连接。', None, 1225, None)
 
-    * [WARNING] WebSocket监听时发生了问题 ("Multiple exceptions: [Errno 61] Connect call failed ('::1', 5201, 0, 0), [Errno 61] Connect led ('127.0.0.1', 5201)",)
+    * [WARNING] WebSocket监听时发生了问题 ("Multiple exceptions: [Errno 61] Connect call failed ('::1', 5201, 0, 0), [Errno 61]
+      Connect led ('127.0.0.1', 5201)",)
 
 ## 测试
 
@@ -434,19 +448,19 @@ user-agent:
 ## ScreenShots
 
 <div align=center>
-<img src="https://github.com/yqchilde/JDMemberCloseAccount/blob/main/screenshots/test_img1.gif" width="600" />
+<img src="https://github.com/yqchilde/JDMemberCloseAccount/blob/main/doc/test_img1.gif" width="600" />
 </div>
 
 <div align=center>
-<img src="https://github.com/yqchilde/JDMemberCloseAccount/blob/main/screenshots/test_img2.gif" width="600" />
+<img src="https://github.com/yqchilde/JDMemberCloseAccount/blob/main/doc/test_img2.gif" width="600" />
 </div>
 
 <div align=center>
-<img src="https://github.com/yqchilde/JDMemberCloseAccount/blob/main/screenshots/test_img3.png" width="600" />
+<img src="https://github.com/yqchilde/JDMemberCloseAccount/blob/main/doc/test_img3.png" width="600" />
 </div>
 
 <div align=center>
-<img src="https://github.com/yqchilde/JDMemberCloseAccount/blob/main/screenshots/test_img4.png" width="800" />
+<img src="https://github.com/yqchilde/JDMemberCloseAccount/blob/main/doc/test_img4.png" width="800" />
 </div>
 
 <div align=center>
